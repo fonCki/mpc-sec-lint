@@ -1,0 +1,22 @@
+name: MCP Security Lint
+description: Run mcp-sec-lint and emit SARIF findings
+inputs:
+  path:
+    description: Path to scan
+    default: .
+  fail-on:
+    description: 'off | info | warning | error'
+    default: error
+  out:
+    description: SARIF file output path
+    default: mcp-sec.sarif
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm i
+      shell: bash
+    - run: node bin/mcp-sec-lint --path "${{ inputs.path }}" --format sarif --out "${{ inputs.out }}" --fail-on "${{ inputs.fail-on }}"
+      shell: bash
