@@ -1,18 +1,24 @@
 name: MCP Security Checks
 on:
-  pull_request:
   push:
-    branches: [ main ]
+  pull_request:
+permissions:
+  contents: read
+  security-events: write   # needed to upload SARIF
+
 jobs:
-  scan:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Run MCP Security Lint
+        uses: fonCki/mcp-sec-lint@v0.1.0
         with:
-          node-version: '20'
-      - run: npm ci || npm i
-      - run: node bin/mcp-sec-lint --format sarif --out mcp-sec.sarif || true
-      - uses: github/codeql-action/upload-sarif@v3
+          path: .
+          fail-on: warning   # job fails on warning or worse
+
+      - name: Upload SARIF to code scanning
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: mcp-sec.sarif
