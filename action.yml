@@ -16,8 +16,9 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: npm ci || npm i
+    # Install deps in the ACTION directory (not caller repo)
+    - run: npm --prefix "${{ github.action_path }}" install --no-audit --no-fund
       shell: bash
-    - run: node bin/mcp-sec-lint --path "${{ inputs.path }}" --format sarif --out "${{ inputs.out }}" --fail-on "${{ inputs.fail-on }}"
+    # Run the CLI from the ACTION directory
+    - run: node "${{ github.action_path }}/bin/mcp-sec-lint" --path "${{ inputs.path }}" --format sarif --out "${{ inputs.out }}" --fail-on "${{ inputs.fail-on }}"
       shell: bash
-
