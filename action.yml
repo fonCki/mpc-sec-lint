@@ -1,5 +1,5 @@
 name: MCP Security Lint
-description: Run mcp-sec-lint and emit SARIF findings
+description: Run mcp-sec-lint, print console summary, and emit SARIF
 inputs:
   path:
     description: Path to scan
@@ -16,9 +16,16 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    # Install deps in the ACTION directory (not caller repo)
+    # Install the action's deps (in the action folder)
     - run: npm --prefix "${{ github.action_path }}" install --no-audit --no-fund
       shell: bash
-    # Run the CLI from the ACTION directory
-    - run: node "${{ github.action_path }}/bin/mcp-sec-lint" --path "${{ inputs.path }}" --format sarif --out "${{ inputs.out }}" --fail-on "${{ inputs.fail-on }}"
+
+    # 1) Generate SARIF (never fail this step)
+    - name: MCP Lint (SARIF)
+      run: node "${{ github.action_path }}/bin/mcp-sec-lint" --path "${{ inputs.path }}" --format sarif --out "${{ inputs.out }}" --fail-on off || true
+      shell: bash
+
+    # 2) Console run (controls pass/fail and shows messages in logs)
+    - name: MCP Lint (console)
+      run: node "${{ github.action_path }}/bin/mcp-sec-lint" --path "${{ inputs.path }}" --format console --fail-on "${{ inputs.fail-on }}"
       shell: bash
