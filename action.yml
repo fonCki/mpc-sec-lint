@@ -20,3 +20,4 @@ runs:
       shell: bash
     - run: node bin/mcp-sec-lint --path "${{ inputs.path }}" --format sarif --out "${{ inputs.out }}" --fail-on "${{ inputs.fail-on }}"
       shell: bash
+
