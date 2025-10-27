@@ -1,0 +1,17 @@
+{
+  "name": "mcp-sec-lint",
+  "version": "0.1.0",
+  "description": "MCP Security Best-Practices linter (PR-time checks).",
+  "bin": {
+    "mcp-sec-lint": "bin/mcp-sec-lint"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "lint:run": "node bin/mcp-sec-lint",
+    "test": "node --test",
+    "test:demo": "node bin/mcp-sec-lint --path demo"
+  },
+  "dependencies": {
+    "fast-glob": "^3.3.2"
+  }
+}

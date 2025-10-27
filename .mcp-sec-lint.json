@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "mcp-token-passthrough": { "enabled": true },
+    "mcp-dangerous-exec": { "enabled": true },
+    "mcp-no-auth-http": { "enabled": true },
+    "mcp-oauth-hygiene": { "enabled": true },
+    "mcp-tool-arg-validation": { "enabled": true }
+  },
+  "exclude": ["**/node_modules/**", "**/dist/**", "**/build/**"]
+}
